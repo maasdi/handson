@@ -18,6 +18,16 @@ public class ProductGrouping {
         productList.add(new Product(4, "Xiaomi OCOOKER Dual Side", new BigDecimal(175), new Seller(3, "Xiomi Malaysia")));
 
         // Do grouping and display the products base on its sellerNo
+        // Sample Result:
+        /**
+         * Seller A
+         * 	- iPhone 13 Pro
+         * 	- iPhone X
+         * Adidas Official Seller
+         * 	- Adidas T-Shirt
+         * Xiomi Malaysia
+         * 	- Xiaomi OCOOKER Dual Side
+         */
     }
 
 }
