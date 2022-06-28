@@ -36,9 +36,10 @@ public class ProductGrouping {
         sellerProducts.stream().sorted((x, y) -> x.seller.getNo() - y.seller.getNo())
           .forEach(x -> {
               System.out.println(x.seller.getName());
-              x.products.forEach(y -> {
-                  System.out.println(" - " + y.getName());
-              });
+
+              for (; x.products.isEmpty() == false;) {
+                  System.out.println(" - " + x.products.poll().getName());
+              }
           });
 
 
