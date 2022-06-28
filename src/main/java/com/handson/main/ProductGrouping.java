@@ -4,8 +4,7 @@ import com.handson.model.Product;
 import com.handson.model.Seller;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class ProductGrouping {
 
@@ -18,6 +17,32 @@ public class ProductGrouping {
         productList.add(new Product(3, "iPhone X", new BigDecimal(2500), sellerA));
         productList.add(new Product(4, "Xiaomi OCOOKER Dual Side", new BigDecimal(175), new Seller(3, "Xiomi Malaysia")));
 
+        List<SellerProduct> sellerProducts = new ArrayList<>();
+
+        for (Product prod : productList) {
+
+            Optional<SellerProduct> sellerProductOptional = sellerProducts.stream().filter(x -> x.seller.getNo() == prod.getSeller().getNo()).findFirst();
+
+            if (sellerProductOptional.isPresent() == true) {
+                sellerProductOptional.get().addProduct(prod);
+            }
+            else {
+                SellerProduct sellerProduct = new SellerProduct(prod.getSeller());
+                sellerProduct.addProduct(prod);
+                sellerProducts.add(sellerProduct);
+            }
+        }
+
+        sellerProducts.stream().sorted((x, y) -> x.seller.getNo() - y.seller.getNo())
+          .forEach(x -> {
+              System.out.println(x.seller.getName());
+
+              for (; x.products.isEmpty() == false;) {
+                  System.out.println(" - " + x.products.poll().getName());
+              }
+          });
+
+
         // Do grouping and display the products base on its sellerNo
         // Sample Result:
         /**
@@ -29,6 +54,26 @@ public class ProductGrouping {
          * Xiomi Malaysia
          * 	- Xiaomi OCOOKER Dual Side
          */
+    }
+
+    static class SellerProduct {
+
+        private Seller seller;
+
+        private PriorityQueue<Product> products;
+
+        public SellerProduct(Seller seller) {
+            this.seller = seller;
+            this.products = new PriorityQueue<>((x, y) -> x.getNo() - y.getNo());
+        }
+
+        public void addProduct(Product product) {
+            this.products.add(product);
+        }
+
+        public PriorityQueue<Product> getProducts() {
+            return this.products;
+        }
     }
 
 }
